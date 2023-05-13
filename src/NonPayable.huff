@@ -10,4 +10,19 @@
 
 #define macro MAIN() = takes(0) returns(0) {
 
+    push1 0x00
+    callvalue
+    gt
+    push1 0x0c
+    jumpi
+    
+    push1 0x00
+    push1 0x00
+    return
+
+    jumpdest
+    push1 0x00
+    push1 0x00
+    revert
+
 }

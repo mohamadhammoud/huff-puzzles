@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
+import "forge-std/console.sol";
 import {HuffConfig} from "foundry-huff/HuffConfig.sol";
 import {HuffDeployer} from "foundry-huff/HuffDeployer.sol";
 import {NonMatchingSelectorHelper} from "./test-utils/NonMatchingSelectorHelper.sol";
@@ -41,6 +42,8 @@ contract MultiplyTest is Test, NonMatchingSelectorHelper {
         bytes4[] memory func_selectors = new bytes4[](1);
         func_selectors[0] = Multiply.multiply.selector;
 
+        console.logBytes4(Multiply.multiply.selector);
+
         bool success = nonMatchingSelectorHelper(
             func_selectors,
             callData,
@@ -49,3 +52,10 @@ contract MultiplyTest is Test, NonMatchingSelectorHelper {
         assert(!success);
     }
 }
+
+//
+// 0x165c4a160000000000000000000000000000000000000000000000000000000000000002ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+
+// 0x165c4a1600000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003
+
+// 0000000000000000000000000000000000000000000000000000000000000006

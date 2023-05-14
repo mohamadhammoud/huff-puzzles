@@ -12,5 +12,79 @@
 
 
 #define macro MAIN() = takes(0) returns(0) {
+push1 0x04
+push1 0x00
+push1 0x00
+calldatacopy
 
+push1 0x00
+mload
+
+push1 0xe0
+shr
+dup1
+
+push4 0x1e2aea06
+eq
+push1 0x1c
+jumpi
+push1 0x20
+push1 0x00
+revert
+
+jumpdest
+push1 0x20
+push1 0x04
+calldatasize
+sub
+div
+
+push1 0x00
+mstore
+
+jumpdest
+push1 0x02
+push1 0x00
+mload
+gt
+push1 0x36
+jumpi
+
+push1 0x20
+push1 0x20
+return
+
+jumpdest
+push1 0x01
+push1 0x00
+mload        // load the counter = index
+sub
+
+push1 0x20   //push 1 byte to the stack
+mul          // multiply the index with byte  
+push1 0x04   
+add         // [0x04] offset the function parameters
+calldataload    // [index parameter]
+
+push1 0x20 
+mload        // get the sum number
+add         // add the sum with new calldataload
+
+push1 0x20
+mstore        // store the sum in the memory
+
+push1 0x01
+push1 0x00    // we need to subtract the counter in memory
+mload
+sub
+
+push1 0x00
+mstore
+push1 0x27
+jump
 }
+// 0000000000000000000000000000000000000000000000000000000000000002
+
+// 0x1e2aea0600000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000004
+
+// 0000000000000000000000000000000000000000000000000000000000000006

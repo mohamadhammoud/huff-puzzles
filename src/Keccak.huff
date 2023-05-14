@@ -9,5 +9,34 @@
 
 
  #define macro MAIN() = takes(0) returns(0) {
+    push1 0x20
+    push1 0x00
+    mstore
     
+    calldatasize
+    push1 0x20
+    mstore
+   
+    push1 0x02
+    push1 0x00
+    push1 0x40
+    calldatacopy
+
+    push1 0x60
+    push1 0x00
+    sha3
+
+    push1 0x00
+    mstore 
+
+    push1 0x20
+    push1 0x00
+
+    return
  }
+
+ // 0x0000000000000000000000000000000000000000000000000000000000000020
+ // 0000000000000000000000000000000000000000000000000000000000000002
+ // abcd000000000000000000000000000000000000000000000000000000000000
+
+ // 0x9086b50fb90f7f12f01acbf00d615393eb1f9bab585936d9aeaa3c085748235b

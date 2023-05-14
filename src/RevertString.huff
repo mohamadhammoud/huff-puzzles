@@ -13,5 +13,12 @@
 
 
 #define macro MAIN() = takes(0) returns(0) {
-    
+push9 0x4f6e6c792048756666
+push1 0x00
+mstore
+
+push1 0x09
+push1 0x17
+revert 
 }
+// 4f6e6c792048756666

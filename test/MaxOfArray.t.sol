@@ -62,3 +62,86 @@ contract MaxOfArrayTest is Test, NonMatchingSelectorHelper {
         assert(!success);
     }
 }
+
+// push1 0x04
+// push1 0x00
+// push1 0x00
+// calldatacopy
+
+// push1 0x00
+// mload
+
+// push1 0xe0
+// shr
+// dup1
+
+// push4 0xa9505eb4
+// eq
+// push1 0x1c
+// jumpi
+// push1 0x20
+// push1 0x00
+// revert
+
+// jumpdest
+// push1 0x00
+// push1 0x04
+// calldataload   // [first argument in calldata]
+// gt
+// push1 0x2b
+// jumpi
+
+// push1 0x00
+// push1 0x00
+// revert
+
+// jumpdest
+// push1 0x20
+// push1 0x24
+// calldatasize
+// sub
+// div
+
+// push1 0x00
+// mstore
+
+// jumpdest
+// push1 0x00
+// mload        // load the counter = index
+// dup1
+// push1 0x00
+// eq
+// push1 0x5f
+// jumpi
+
+// push1 0x20   //push 1 byte to the stack
+// mul          // multiply the index with byte
+// push1 0x04
+// add         // [0x04] offset the function parameters
+// calldataload    // [index parameter]
+// dup1
+
+// push1 0x20
+// mload        // get the maximum number from 0x20 memory
+// gt         // check if greater of calldataload
+
+// push1 0x01
+// push1 0x00
+// mload
+// sub        // we need to subtract the counter in memory
+// push1 0x00
+// mstore
+
+// push1 0x36
+// jumpi
+
+// push1 0x20
+// mstore        // store the greater in the memory
+
+// push1 0x36
+// jump
+
+// jumpdest
+// push1 0x20
+// push1 0x20
+// return

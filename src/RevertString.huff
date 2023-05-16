@@ -11,14 +11,35 @@
  *  The task is to write within the `MAIN` macro below, huff code that reverts (all the time) with the string error message `Only Huff`
 */
 
+#define error Error(string)
 
 #define macro MAIN() = takes(0) returns(0) {
-push9 0x4f6e6c792048756666
-push1 0x00
-mstore
 
-push1 0x09
-push1 0x17
-revert 
+    
+    __ERROR(Error)        // [error_selector, message_length, message]
+    push1 0x00
+    mstore           // [message_length, message]
+    
+    push1 0x20
+    push1 0x04
+    mstore      // [message_length, message]
+    
+    push1 0x09
+    push1 0x24
+    mstore         // [message]
+
+    push32 0x4f6e6c7920487566660000000000000000000000000000000000000000000000 // "Only Huff"
+    push1 0x44
+    mstore        // []
+
+    push1 0x64
+    push1 0x04  // no need for the selector
+    revert
+
+
+
 }
-// 4f6e6c792048756666
+
+// 0x0000000000000000000000000000000000000000000000000000000000000020
+// 0000000000000000000000000000000000000000000000000000000000000009
+// 4f6e6c7920487566660000000000000000000000000000000000000000000000

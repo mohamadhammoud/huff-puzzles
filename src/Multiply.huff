@@ -42,7 +42,7 @@ push1 0x04      // [0x04] offset the function parameters
 calldataload    // [first parameter]
 
 push1 0x24
-calldataload    // load the first parameter of calldata into the stack
+calldataload    // load the second parameter of calldata into the stack [second parameter, first paramter]
 
 MUL
 dup1

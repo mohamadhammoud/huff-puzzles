@@ -12,5 +12,174 @@
 #define function withdraw(uint256) payable returns()
 
 #define macro MAIN() = takes(0) returns(0) {
+push1 0x04
+push1 0x00
+push1 0x00
+calldatacopy
 
+push1 0x00
+mload
+
+push1 0xe0
+shr
+dup1
+
+push4 0x70a08231 // balanceOf(address)
+eq
+push1 0x43
+jumpi
+
+push4 0x2e1a7d4d // withdraw(uint256)
+eq
+push1 0x67
+jumpi
+
+
+    // storing the value in addition of previous balance for specific address in slot 0
+    push1 0x20
+    push1 0x00
+    mstore
+
+    push1 0x40
+    push1 0x20
+    mstore
+
+    caller
+    push1 0x40  // storing the caller
+    mstore
+
+    push1 0x00
+    push1 0x60  // storing the slot index
+    mstore
+
+    
+    push1 0x80
+    push1 0x00  // hash from memory 0 to 80 ( including all metadata length and the real data)
+    sha3
+
+    dup1    
+    sload // get the previous balance
+    callvalue 
+    add  // add the new value
+
+    swap1  // swap the hash slot and the new number
+    sstore
+    
+    push1 0x00
+    push1 0x00
+    return
+    
+    // load balance of an address
+    jumpdest
+    push1 0x20
+    push1 0x00
+    mstore
+
+    push1 0x40
+    push1 0x20
+    mstore
+
+    push1 0x04
+    calldataload
+    push1 0x40  // storing the first parameter (address)
+    mstore
+
+    push1 0x00
+    push1 0x60  // storing the slot index
+    mstore
+
+    
+    push1 0x80
+    push1 0x00  // hash from memory 0 to 80 ( including all metadata length and the real data)
+    sha3
+    sload
+    
+    push1 0x00
+    mstore
+    
+    push1 0x20
+    push1 0x00
+    return
+    
+    // withdraw functionality
+    jumpdest
+    push1 0x20
+    push1 0x00
+    mstore
+
+    push1 0x40
+    push1 0x20
+    mstore
+
+    caller
+    push1 0x40  // storing the caller (address)
+    mstore
+
+    push1 0x00
+    push1 0x60  // storing the slot index
+    mstore
+
+    
+    push1 0x80
+    push1 0x00  // hash from memory 0 to 80 ( including all metadata length and the real data)
+    sha3
+
+    dup1
+    push1 0x60
+    mstore  // store the hash in memory at 60
+
+    sload  // get the balance from dup1
+
+    dup1   //  duplicate the balance in stack
+    dup1   //  duplicate the balance in stack
+    push1 0x20
+    mstore
+
+    push1 0x04
+    calldataload
+    eq
+    push1 0x98
+    jumpi
+
+    push1 0x04
+    calldataload
+    gt
+    push1 0xbd
+    jumpi
+
+    jumpdest
+    push1 0x04
+    calldataload
+    push1 0x20
+    mload
+    sub
+
+    push1 0x40
+    mstore
+
+    push1 0x00
+    push1 0x00                   
+    push1 0x00                   
+    push1 0x00                    
+    push1 0x04 // get the calldata number parameter                    
+    calldataload        // get the value
+    caller
+    gas                    // gas
+    call                    // Call the address
+
+    push1 0x40
+    mload
+    push1 0x60
+    mload
+    sstore
+    
+    push1 0x20
+    push1 0x40
+    return
+
+
+    jumpdest
+    push1 0x00
+    push1 0x00
+    revert
 }

@@ -14,5 +14,106 @@
 
 
  #define macro MAIN() = takes(0) returns(0) {
-   
+push1 0x04
+push1 0x00
+push1 0x00
+calldatacopy
+
+push1 0x00
+mload
+
+push1 0xe0
+shr
+dup1
+
+push4 0x6138889b
+eq
+push1 0x1c
+jumpi
+
+push1 0x00
+push1 0x00
+revert
+
+
+jumpdest
+push1 0x20
+push1 0x04
+push1 0x20
+calldatacopy // storing the 0x20 offset 
+
+push1 0x20
+push1 0x24
+push1 0x40
+calldatacopy // storing the length of the array offset 
+
+push1 0x40
+mload
+push1 0x60 
+mstore     // storing the counter == length first
+
+
+
+push1 0x60
+mload
+callvalue   // divide the msg.value / length
+div
+
+push1 0x80  
+mstore      // store the division in memory
+
+jumpdest
+push1 0x60
+mload       // load the counter
+push1 0x00
+eq
+push1 0x6d
+jumpi
+
+push1 0x60
+mload       // load the counter
+push1 0x01
+add
+push1 0x20   //push 1 byte to the stack
+mul          // multiply the index with byte  
+push1 0x04   
+add         // [0x04] offset the function parameters
+calldataload    // [index parameter]
+dup1
+
+push1 0x00
+push1 0x00
+push1 0x00
+push1 0x00
+push1 0x80
+mload     // get the divided value
+push1 0x01
+swap6
+gas
+call
+
+push1 0x01
+push1 0x60
+mload
+sub
+push1 0x60
+mstore
+
+push1 0x39
+jump
+
+jumpdest
+push1 0x00
+push1 0x00
+return
+
+
  }
+
+ // 0x6138889b
+
+ // 0000000000000000000000000000000000000000000000000000000000000020
+ // 0000000000000000000000000000000000000000000000000000000000000003
+ // 0000000000000000000000000000000000000000000000000000000000000022
+ // 0000000000000000000000000000000000000000000000000000000000000023
+ // 0000000000000000000000000000000000000000000000000000000000000024

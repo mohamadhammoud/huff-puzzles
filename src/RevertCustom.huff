@@ -14,6 +14,18 @@
 #define error OnlyHuff()
 
 #define macro MAIN() = takes(0) returns(0) {
+
+    // function singOnluHuff() public pure returns (bytes32) {
+    //     return keccak256(("OnlyHuff()"));
+    // }
+
+    // since there is no abi.encode
+    // we just provide hash the provide the location in memory for "OnlyHuff()" and the length
+
+    // push1 0x020 // location of "OnlyHuff()" bytes
+    // push1 0x0a  // length of "OnlyHuff()" bytes
+    // SHA3
+
 push32 0xe829737a9f3a0deff344bce4ded8041e9ac3a1391a12e5abf2b77731694ef944
 push1 0x00
 mstore

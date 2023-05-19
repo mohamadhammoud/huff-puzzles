@@ -25,5 +25,310 @@
  #define error ZeroArray()
 
  #define macro MAIN() = takes(0) returns(0) {
+push1 0x04
+push1 0x00
+push1 0x00
+calldatacopy
+
+push1 0x00
+mload
+
+push1 0xe0
+shr
+dup1
+dup1
+dup1
+dup1
+
+     // pushh(uint256 num)
+push4 0x5edfe85d
+eq
+push1 0x45
+jumpi
+
+    //popp()
+push4 0x6a57dbc7
+eq
+push1 0x7e
+jumpi
+
+    // read(uint256)
+push4 0xed2e5a97
+eq
+push1 0xc8
+jumpi
+
+    // length()
+push4 0x1f7b6d32
+eq
+push2 0x134
+jumpi
+
+    // write(uint256,uint256)
+push4 0x9c0e3f7a
+eq
+push2 0x140
+jumpi
+
+    // no recognised function
+push1 0x20
+push1 0x00
+revert
+
+    // -----------------------------------------------------------------------
+    // pushh(uint256 num) implementation
+    jumpdest
+
+    push1 0x20
+    push1 0x20  
+    mstore
+
+    push1 0x01
+    push1 0x40  // adding length of slot 0
+    mstore
+
+    push1 0x00
+    push1 0x60  // adding slot index
+    mstore
+
+    
+    push1 0x60
+    push1 0x20  // hash from memory 20 to 80 ( including all metadata length and the real data)
+    sha3
+    dup1
+
+    push1 0x00 
+    sload
+    add     // add the hash with the length of array to know where do we need to store the new value
+
+    push1 0x80
+    mstore
+
+    push1 0x20
+    push1 0x04
+    push1 0xf0
+    calldatacopy
+
+    push1 0xf0
+    mload
+    push1 0x80
+    mload
+    sstore
+
+    push1 0x00
+    sload
+    push1 0x01
+    add         // adding one to the length, stored in slot 0
+    push1 0x00
+    sstore
+    
+    push1 0x00
+    push1 0x00
+    return
+
+    // -----------------------------------------------------------------------
+    // popp() implementation
+    jumpdest
+
+    push1 0x00
+    push1 0x00
+    sload
+    gt
+
+    push1 0xb9
+    jumpi
+
+    // revert ZeroArray() don't forget about it
+    // (bytes("ZeroArray()"))
+    push32 0x5a65726f41727261792829000000000000000000000000000000000000000000
+    push1 0x00
+    mstore
+
+    push1 0x0b
+    push1 0x00   // hash from memory 0 to the length
+    sha3
+
+    push1 0x00
+    mstore          // store the keccak hash in memory
+
+    push1 0x04  
+    push1 0x00
+    revert          // revert all the keccak
+
+    // popping...
+    jumpdest
+    push1 0x01
+    push1 0x00
+    sload
+    sub         // subtract one to the length, stored in slot 0
+    push1 0x00
+    sstore
+    
+    push1 0x00
+    push1 0x00
+    return
+
+    // -----------------------------------------------------------------------
+    // read(uint256 index)
+
+    jumpdest
+
+    push1 0x00
+    sload
+
+    push1 0x04
+    calldataload
+    lt
+    push2 0x105
+    jumpi
+
+    // (bytes("OutOfBounds()"))
+    push32 0x4f75744f66426f756e6473282900000000000000000000000000000000000000
+    push1 0x00
+    mstore
+
+    push1 0x0d
+    push1 0x00   // hash from memory 0 to the length
+    sha3
+
+    push1 0x00
+    mstore       // store the keccak hash in memory
+
+    push1 0x04
+    push1 0x00
+    revert        // revert all the keccak
+
+    // passing Zero Array error
+    jumpdest
+    push1 0x20
+    push1 0x20  
+    mstore
+
+    push1 0x01
+    push1 0x40  // adding length of slot 0
+    mstore
+
+    push1 0x00
+    push1 0x60  // adding slot index
+    mstore
+
+    
+    push1 0x60
+    push1 0x20  // hash from memory 20 to 80 ( including all metadata length and the real data)
+    sha3
+
+    push1 0x80
+    mstore
+
+    push1 0x20
+    push1 0x04
+    push1 0xa0
+    calldatacopy
+
+    push1 0xa0
+    mload
+    push1 0x80
+    mload
+    add     // add the hash with the length of array to know where do we need to read value
+    sload
+
+    push1 0xc0
+    mstore
+
+    push1 0x20
+    push1 0xc0
+    return
+
+    // -----------------------------------------------------------------------
+    // length()
+    jumpdest
+    push1 0x00
+    sload
+
+    push1 0x00
+    mstore
+
+    push1 0x20
+    push1 0x00
+    return 
+
+    // -----------------------------------------------------------------------
+    // write(uint256,uint256)
+    jumpdest
+    push1 0x00
+    sload
+
+    push1 0x04
+    calldataload
+    lt
+    push2 0x17d
+    jumpi
+
+    // (bytes("ZeroArray()"))
+    push32 0x4f75744f66426f756e6473282900000000000000000000000000000000000000
+    push1 0x00
+    mstore
+
+    push1 0x0d
+    push1 0x00   // hash from memory 0 to the length
+    sha3
+
+    push1 0x00
+    mstore       // store the keccak hash in memory
+
+    push1 0x04
+    push1 0x00
+    revert        // revert all the keccak
+
+    // passing Zero Array error
+    jumpdest
+    push1 0x20
+    push1 0x20  
+    mstore
+
+    push1 0x01
+    push1 0x40  // adding length of slot 0
+    mstore
+
+    push1 0x00
+    push1 0x60  // adding slot index
+    mstore
+
+    
+    push1 0x60
+    push1 0x20  // hash from memory 20 to 80 ( including all metadata length and the real data)
+    sha3
+
+    push1 0x80
+    mstore
+
+    push1 0x20
+    push1 0x04
+    push1 0xa0
+    calldatacopy
+
+    push1 0xa0
+    mload
+    push1 0x80
+    mload
+    add     // add the hash with the length of array to know where do we need to read value
+
+    push1 0x20
+    push1 0x24
+    push1 0xc0
+    calldatacopy
+
+    push1 0xc0
+    mload
+    swap1
+    sstore
+
+    push1 0x00
+    push1 0x00
+    return
     
  }
+
+ // 0xF0EF7470C05BE4BA5730AE00902F66C4293C5EE94EB70602E93515150CD3B91C keccak256(bytes("ZeroArray()"))
+
+ // 0x4f75744f66426f756e6473282900000000000000000000000000000000000000

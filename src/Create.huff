@@ -13,5 +13,45 @@
 
 
  #define macro MAIN() = takes(0) returns(0) {
-    
+push1 0x04
+push1 0x00
+push1 0x00
+calldatacopy
+
+push1 0x00
+mload
+
+push1 0xe0
+shr
+
+push4 0x6cd3dc11
+eq
+push1 0x1b
+jumpi
+push1 0x00
+push1 0x00
+revert
+
+
+jumpdest
+push32 0x0caf60005260205260296000f300000000000000000000000000000000000000
+push32 0x007f7f0000000000000000000000000000000000000000000000000000000000
+push32 0x7ffe60005260206000f300000000000000000000000000000000000000000000
+push1 0x20
+mstore
+push1 0x40
+mstore
+push1 0x60
+mstore
+
+push1 0x4d
+push1 0x20
+push1 0x00
+create
+
+push1 0x80
+mstore
+push1 0x20
+push1 0x80
+return
  }
